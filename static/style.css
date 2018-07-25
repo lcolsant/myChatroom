@@ -1,0 +1,86 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+
+h1{
+    /* margin: 20px auto; */
+    text-align: center;
+    /* margin-top: 300px; */
+    font-size: 60px;
+    color: navy;
+    padding-top:200px;
+}
+
+h2{
+    /* margin: 20px auto; */
+    text-align: center;
+    /* margin-top: 300px; */
+    font-size: 40px;
+    color: navy;
+    padding-top:100px;
+}
+
+h3{
+    /* margin: 20px auto; */
+    text-align: center;
+    margin-top: 20px;
+    font-size: 30px;
+    color: navy;
+}
+
+button{
+    margin: 10px auto;
+    display: block;
+    width: 100px;
+    height: 50px;
+    color: navy;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#container{
+    /* background-color: gray; */
+    margin: 0 auto;
+    height: 100%;
+}
+
+#chatroom{
+    border: 1px solid black;
+    width: 60%;
+    min-height: 75%;
+    margin: 0 auto;
+    padding-left: 10px;
+    font:18px;
+    color:darkblue;
+}
+
+#message{
+    border: 1px solid black;
+    width: 60%;
+    height: 5%;
+    display: block;
+    margin: 10px auto;
+    font-size:18px;
+    color:darkblue;
+    padding-left: 10px;
+}
+
+#new_msg{
+    font-size:18px;
+    font-weight: 600;
+    color:darkblue;
+}
+
+#new_join{
+    font-size:12px;
+    font-style: italic;
+    color:red;
+}

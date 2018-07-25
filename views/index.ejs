@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Group Chat</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
+    <script>
+        $(document).ready(function(){
+            var socket = io();
+            
+            socket.on('greeting', function(data){
+                console.log(data.msg);
+                socket.emit('connected',{msg:'client connection complete.'});
+                socket.emit('join',name);
+            });
+            socket.on('join_announcement', function(name){
+                console.log(name);
+                $('#chatroom').append(`<p><span id='new_join'>${name} has joined the chatroom </span></p>`);
+            });
+            socket.on('updateChatHistory', function(messages){
+                for (message of messages){
+                    $('#chatroom').append(`<p><span id='new_msg'>${message.name}:</span> ${message.message}</p>`);
+                }
+            });
+            $('#chat_btn').click(function(){
+                let data = {
+                    message: $('#message').val(),
+                    name: name,
+                }
+                socket.emit('incoming_msg',{msg:data});
+                console.log('name is:'+name);
+                console.log('message is:'+$('#message').val());
+                $('#message').val('');
+            });
+            socket.on('new_msg', function(data){
+                console.log('sent from server:'+data.msg.message);
+                $('#chatroom').append(`<p><span id='new_msg'>${data.msg.name}:</span> ${data.msg.message}</p>`);
+            })
+            
+            socket.on('left_announcement', function(name){
+                $('#chatroom').append(`<p><span id='new_join'>${name} has left the chatroom </span></p>`);
+            });
+        });
+    </script>
+    <script>
+        var name = prompt('What is your name?');
+    </script>
+</head>
+    <body>
+        <div id="container">
+            <h2><u>Chatroom</u></h2>
+            <div id="chatroom">
+            </div>
+            <input type="textarea" name="message" id="message" placeholder=" Enter a message:">
+            <button id="chat_btn">Send</button>
+        </div>
+    </body>
+</html>
