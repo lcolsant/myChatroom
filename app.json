@@ -1,0 +1,5 @@
+{
+    "name": "myChatroom app",
+    "description": "Chatroom app using Node.js and socket.io",
+    "repository": "https://github.com/lcolsant/myChatroom"
+}
