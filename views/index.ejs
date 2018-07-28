@@ -17,8 +17,36 @@
             socket.on('join_announcement', function(name){
                 console.log(name);
                 $('#chatroom').append(`<p><span id='new_join'>${name} has joined the chatroom </span></p>`);
+                
             });
+            
+            //upon initial join, adds all current chatroom users
+            socket.on('updateUsers', function(availUsers){
+                for (user of availUsers){
+                    $('#users').append(`<p><span id='new_msg'>${user.name}</span></p>`);
+                }
+
+            });
+
+            //upon a chatroom user leaving, refreshes current user list for remaining users
+            socket.on('refreshUsers', function(availUsers){
+                $('#users').empty();
+                for (user of availUsers){
+                    $('#users').append(`<p><span id='new_msg'>${user.name}</span></p>`);
+                }
+
+            });
+
+            //adds a new joiner to currently active chatroom users
+            socket.on('updateUser', function(newUser){
+                $('#users').append(`<p><span id='new_msg'>${newUser}</span></p>`);
+
+            });
+
+            //updates chathistory for all users when a new message is submitted.
             socket.on('updateChatHistory', function(messages){
+                console.log('got to chathistory');
+
                 for (message of messages){
                     $('#chatroom').append(`<p><span id='new_msg'>${message.name}:</span> ${message.message}</p>`);
                 }
@@ -33,11 +61,13 @@
                 console.log('message is:'+$('#message').val());
                 $('#message').val('');
             });
+            
             socket.on('new_msg', function(data){
                 console.log('sent from server:'+data.msg.message);
                 $('#chatroom').append(`<p><span id='new_msg'>${data.msg.name}:</span> ${data.msg.message}</p>`);
             })
             
+            //announces departure of a chatroom user
             socket.on('left_announcement', function(name){
                 $('#chatroom').append(`<p><span id='new_join'>${name} has left the chatroom </span></p>`);
             });
@@ -49,8 +79,11 @@
 </head>
     <body>
         <div id="container">
-            <h2><u>Chatroom</u></h2>
+            <h2>myChatroom-app</h2>
             <div id="chatroom">
+            </div>
+            <div id="users">
+                <p>Users available:</p>
             </div>
             <input type="textarea" name="message" id="message" placeholder=" Enter a message:">
             <button id="chat_btn">Send</button>

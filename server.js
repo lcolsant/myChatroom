@@ -6,6 +6,7 @@ const port = process.env.PORT || 8000;
 const app = express();
 const chatHistory = [];
 const users = {};
+const availUsers = [];
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname + '/static')));
@@ -25,14 +26,31 @@ io.sockets.on('connection', function(socket){
         console.log(data.msg);
     });
     
+    //handles all actions when a new chatroom user joins
     socket.on('join', function(data){
         users[socket.id] = data;
+        socket.emit('updateUsers', availUsers)
+        newUser = {
+            name: data,
+        }
+
+        availUsers.push(newUser);
+        console.log(newUser);
         io.emit('join_announcement', data);
+        io.emit('updateUser', newUser.name);
     });
 
+    //handles all actions when a chatroom user leaves
     socket.on('disconnect', function(reason){
         const user = users[socket.id];
         io.emit('left_announcement', user);
+
+        //finds the index of the user that left in the array of all users
+        let index = availUsers.map(function(user){return user.name;}).indexOf(users[socket.id]);
+        //removes the leaver from the array
+        availUsers.splice(index,1);
+        //sends updated array to refresh user list for all remaining chatroom users
+        io.emit('refreshUsers',availUsers);
     });
 
     socket.on('incoming_msg',function(data){
