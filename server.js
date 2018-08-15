@@ -69,6 +69,6 @@ io.sockets.on('connection', function(socket){
     });
 });
 
-app.get("/", function (request, response){
+app.get("/", function (response){
     response.render('index');
 });
